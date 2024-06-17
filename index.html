@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="css/Book-Shop.css" />
+    <title>Book Shop</title>
+  </head>
+  <body onload="onInit()">
+    <header>
+      <h1>Welcome to my Book-Shop</h1>
+    </header>
+
+    <div class="book-container">
+      <table class="book-list">
+        <thead>
+          <tr class="title-row">
+            <th>Title</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>The Adventures of Lori Ipsi</td>
+            <td>120</td>
+            <td>
+              <button class="read">Read</button>
+              <button class="update">Update</button>
+              <button class="delete">Delete</button>
+            </td>
+          </tr>
+
+          <tr class="second-row">
+            <td>World Atlas</td>
+            <td>300</td>
+            <td>
+              <button class="read">Read</button>
+              <button class="update">Update</button>
+              <button class="delete">Delete</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Zorba the Greek</td>
+            <td>87</td>
+            <td>
+              <button class="read">Read</button>
+              <button class="update">Update</button>
+              <button class="delete">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="js/services/book.service.js"></script>
+    <script src="js/book.controller.js"></script>
+  </body>
+</html>
