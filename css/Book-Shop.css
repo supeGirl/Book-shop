@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 header {
   text-align: center;
 }
@@ -9,56 +10,39 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.book-container {
-  margin-bottom: 10px;
-}
-
 .title-row {
-  justify-content: space-between;
-  align-content: stretch;
   margin: 0;
   background-color: rgb(173, 171, 171);
-  width: 80%;
   padding: 0.5em;
 }
 
-.book-list {
-  border: solid 2px rgb(199, 199, 199);
+
+.books-list {
   width: 80%;
   margin-inline-start: 20px;
+  border: solid 2px rgb(199, 199, 199);
 }
 
-.book-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+.books-list table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.books-list th,
+.books-list td {
+  border:  solid 2px rgb(199, 199, 199);
+  padding: 8px;
+  text-align: left; 
 }
 
 .second-row {
   background-color: rgb(221, 218, 218);
 }
 
-.title {
-  flex: 1;
-  padding-left: 10px;
-}
-
-.price {
-  flex: 0.5;
-  text-align: center;
-}
-
-.actions {
-  flex: 1;
-  display: flex;
-  justify-content: space-around;
-}
-
 button {
   padding: 5px 10px;
   border: none;
-  border-radius: 10px;
+  border-radius: 7px;
   cursor: pointer;
 }
 
