@@ -60,7 +60,8 @@ function onShowDetails(ev, bookId) {
   const book = getBookById(bookId)
 
   //call function in the service that represent the book details
-
-  elPre.innerText = JSON.stringify(book, null, 3)
+  const formattedDetails = formatBookDetails(bookId)
+  
+  elPre.innerText = formattedDetails
   elDetails.showModal()
 }
