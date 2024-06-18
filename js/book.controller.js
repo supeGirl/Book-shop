@@ -23,7 +23,7 @@ function renderBooks() {
    <td>${book.price}</td>
    <td>
    <button class="read">Read</button>
-   <button class="update">Update</button>
+   <button class="update"  onclick="onUpdateBook('${book.id}')">Update</button>
    <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
    </td>
    </tr>
@@ -34,13 +34,28 @@ function renderBooks() {
   elBooksList.innerHTML = srtHtml
 }
 
+function onRemoveBook(bookId) {
+  const isBookRemoved = removeBook(bookId)
 
-function onRemoveBook(bookId){
-    const isBookRemoved = removeBook(bookId)
+  if (isBookRemoved) {
+    renderBooks()
+  } else {
+    alert(`Failed to remove book with ID ('${bookId}').`)
+  }
+}
 
-    if(isBookRemoved){
-        renderBooks()
-    }else{
-        alert(`Failed to remove book with ID ${bookId}.`)
-    }
+function onUpdateBook(bookId) {
+  const book = gBooks.find((book) => book.id === bookId)
+  if (!book) {
+    alert(`Book with ID ('${bookId}') not found.`)
+    return
+  }
+
+  const newPrice = +prompt('Enter a new price')
+  if (isValidPrice(newPrice)) {
+    updateBook(bookId, newPrice)
+    renderBooks()
+  } else {
+    alert('Please enter a valid positive number for the price!')
+  }
 }
