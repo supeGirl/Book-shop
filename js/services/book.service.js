@@ -20,8 +20,6 @@ var gBooks = [
     imgUrl: 'zorba-the-greek.jpg',
   },
 ]
-const showBooks = getBooks()
-console.log('The books are:', showBooks)
 
 function getBooks() {
   return gBooks
@@ -39,18 +37,29 @@ function removeBook(bookId) {
 
 function updateBook(bookId, newPrice) {
   const book = gBooks.find((book) => book.id === bookId)
-  if (!book) {
-    alert(`Book with ID ${bookId} not found.`)
-  } else {
-    book.price = newPrice
+
+  if (!book) return false
+
+  if (!isValidPrice(newPrice)) {
+    alert('Please enter a valid positive number for the price!')
   }
+
+  book.price = newPrice
 }
 
 function addBook(title, price) {
+  if (!title) return
+  if (!isValidPrice(price)) return
+
   const newBook = {
     id: makeid(),
     title: title,
     price: price,
   }
+
   gBooks.unshift(newBook)
+}
+
+function getBookById(bookId) {
+  return gBooks.find((book) => book.id === bookId)
 }

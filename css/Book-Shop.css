@@ -39,6 +39,13 @@ body {
   background-color: rgb(221, 218, 218);
 }
 
+.book-details{
+  padding: 10px;
+  background-color: lightblue;
+  border: 1px solid rgb(224, 255, 255);
+}
+
+
 button {
   padding: 5px 10px;
   border: none;

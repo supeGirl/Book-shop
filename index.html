@@ -13,8 +13,25 @@
 
     <div class="book-container">
       <button class="add-book" onclick="onAddBook()">Add another book</button>
-      <table class="books-list"></table>
+      <table class="books-list">
+        <thead>
+          <tr class="title-row">
+            <th>Title</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
+
+    <dialog class="book-details">
+      <form method="dialog">
+        <button class="modal-btn">X</button>
+        <h2>Book details</h2>
+        <pre></pre>
+      </form>
+    </dialog>
 
     <script src="js/services/util.service.js"></script>
     <script src="js/services/book.service.js"></script>

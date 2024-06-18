@@ -5,35 +5,29 @@ function onInit() {
 }
 
 function renderBooks() {
-  const elBooksList = document.querySelector('.books-list')
+  const elBooksList = document.querySelector('tbody')
 
-  const titleRow = `
-    <thead>
-      <tr class="title-row">
-        <th>Title</th>
-        <th>Price</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-  `
-  const bookRow = gBooks.map(
-    (book, idx) => `<tbody>
-        <tr class = "${idx === 1 ? 'second-row' : ''}"> 
+  const books = getBooks()
+
+  const srtHtml = books.map((book, idx) => `
+        <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
    <td>${book.title}</td>
    <td>${book.price}</td>
    <td>
-   <button class="read">Read</button>
+   <button class="read" onclick ="onShowDetails(event, '${book.id}')">Read</button>
    <button class="update"  onclick="onUpdateBook('${book.id}')">Update</button>
    <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
    </td>
    </tr>
-   </tbody>
+
     `
-  )
-  const srtHtml = titleRow + bookRow.join('')
+    )
+    .join('')
+
   elBooksList.innerHTML = srtHtml
 }
 
+// CR here
 function onRemoveBook(bookId) {
   const isBookRemoved = removeBook(bookId)
 
@@ -45,31 +39,28 @@ function onRemoveBook(bookId) {
 }
 
 function onUpdateBook(bookId) {
-  const book = gBooks.find((book) => book.id === bookId)
-  if (!book) {
-    alert(`Book with ID ('${bookId}') not found.`)
-    return
-  }
-
   const newPrice = +prompt('Enter a new price')
-  if (isValidPrice(newPrice)) {
-    updateBook(bookId, newPrice)
-    renderBooks()
-  } else {
-    alert('Please enter a valid positive number for the price!')
-  }
+
+  updateBook(bookId, newPrice)
+  renderBooks()
 }
 
 function onAddBook() {
   const bookName = prompt('What`s the book`s name?')
-  if (!bookName) return
-
   const bookPrice = +prompt('What`s the book`s price?')
- if(!isValidPrice(bookPrice)) return
 
   addBook(bookName, bookPrice)
   renderBooks()
 }
 
+function onShowDetails(ev, bookId) {
+  ev.stopPropagation()
+  const elDetails = document.querySelector('.book-details')
+  const elPre = elDetails.querySelector('.book-details pre')
+  const book = getBookById(bookId)
 
+  //call function in the service that represent the book details
 
+  elPre.innerText = JSON.stringify(book, null, 3)
+  elDetails.showModal()
+}
