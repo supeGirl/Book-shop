@@ -59,3 +59,17 @@ function onUpdateBook(bookId) {
     alert('Please enter a valid positive number for the price!')
   }
 }
+
+function onAddBook() {
+  const bookName = prompt('What`s the book`s name?')
+  if (!bookName) return
+
+  const bookPrice = +prompt('What`s the book`s price?')
+ if(!isValidPrice(bookPrice)) return
+
+  addBook(bookName, bookPrice)
+  renderBooks()
+}
+
+
+

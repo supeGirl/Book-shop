@@ -45,3 +45,12 @@ function updateBook(bookId, newPrice) {
     book.price = newPrice
   }
 }
+
+function addBook(title, price) {
+  const newBook = {
+    id: makeid(),
+    title: title,
+    price: price,
+  }
+  gBooks.unshift(newBook)
+}
