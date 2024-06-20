@@ -1,6 +1,8 @@
 'use strict'
 
 function onInit() {
+  _createBooks()
+
   renderBooks()
 }
 
@@ -9,7 +11,9 @@ function renderBooks() {
 
   const books = getBooks()
 
-  const srtHtml = books.map((book, idx) => `
+  const srtHtml = books
+    .map(
+      (book, idx) => `
         <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
    <td>${book.title}</td>
    <td>${book.price}</td>
@@ -29,22 +33,28 @@ function renderBooks() {
 
 // CR here
 function onRemoveBook(bookId) {
-  const isBookRemoved = removeBook(bookId)
+  const isComfirmed = confirm('are you sure you want to delete?')
 
-  if (isBookRemoved) {
-    renderBooks()
-  } else {
-    alert(`Failed to remove book with ID ('${bookId}').`)
+  if (!isComfirmed) {
+    alert('ok im not removing')
+    return
   }
-}
-
-function onUpdateBook(bookId) {
-  const newPrice = +prompt('Enter a new price')
-
-  updateBook(bookId, newPrice)
+  alert('delete ')
+  removeBook(bookId)
   renderBooks()
 }
 
+// Update
+function onUpdateBook(bookId, key) {
+  const book = getBookById(bookId)
+  const newPrice = +prompt('Enter a new price ' + book.price)
+  if (!newPrice || newPrice <= 0) return alert('You must add valid price')
+
+  updateBook(bookId, key, newPrice)
+  renderBooks()
+}
+
+// Create - with Propmts
 function onAddBook() {
   const bookName = prompt('What`s the book`s name?')
   const bookPrice = +prompt('What`s the book`s price?')
@@ -53,6 +63,7 @@ function onAddBook() {
   renderBooks()
 }
 
+// Get
 function onShowDetails(ev, bookId) {
   ev.stopPropagation()
   const elDetails = document.querySelector('.book-details')
@@ -61,7 +72,7 @@ function onShowDetails(ev, bookId) {
 
   //call function in the service that represent the book details
   const formattedDetails = formatBookDetails(bookId)
-  
+
   elPre.innerText = formattedDetails
   elDetails.showModal()
 }

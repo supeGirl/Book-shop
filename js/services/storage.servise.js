@@ -5,7 +5,8 @@ function loadFromStorage(key){
    return JSON.parse(valueStr)
 
 }
-function saveTOStorage(value){
+function saveToStorage(key ,value){
+
     const valueStr = JSON.stringify(value)
     localStorage.setItem(key,valueStr)
 }
