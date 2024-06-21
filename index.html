@@ -11,32 +11,57 @@
       <h1>Welcome to my Book-Shop</h1>
     </header>
 
-    <div class="book-container">
-      <button class="add-book" onclick="onAddBook()">Add another book</button>
+    <section class="main-container">
+      <section class="filter-book">
+        <form>
+          <label>
+            Search by title
+            <input
+              oninput="onSetFilterBy(this)"
+              class="book-title"
+              type="text"
+              placeholder="Book title"
+              name="by-title"
+            />
+          </label>
+        </form>
+
+  <div>
+    <button class="reset-filter" onclick="onResetFilter()">Reset filters</button>
+    <button class="add-book" onclick="onAddBook()">Add another book</button>
+  </div>
+</section>
       <table class="books-list">
-        <thead>
-          <tr class="title-row">
+        <thead class="head-table">
+          <tr>
+            <th>ID</th>
             <th>Title</th>
             <th>Price</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody class="body-table"></tbody>
       </table>
-    </div>
+    </section>
 
     <dialog class="book-details">
       <form method="dialog">
-        <button class="modal-btn">X</button>
-        <h2>Book details</h2>
-        <div class="modal-content">
-      <pre class="book-details-content"></pre>
-      <div class="book-cover">
-        <img class="book-cover-img" src="" alt="Book Cover">
-      </div>
-    </div>
+        <div class="book-cover-img">
+          <img src="" />
+        </div>
+  
+        <div class="book-desc">
+          <h3 class="title"></h3>
+          <p class="desc"></p>
+  
+          </div>
+        </div>
+        <button class="close">✖</button>
       </form>
     </dialog>
+  
+
+    <div class="user-msg hide"></div>
 
     <script src="js/services/storage.servise.js"></script>
     <script src="js/services/util.service.js"></script>

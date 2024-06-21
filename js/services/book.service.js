@@ -1,14 +1,23 @@
 'use strict'
 
 var gBooks = []
+var gFilterBy = ''
+
+// !always save to storage after CRUD
+
 
 function getBooks() {
-  return gBooks
+  if (!gFilterBy) return gBooks
+
+  var filteredBooks  = gBooks.filter((book) =>  book.title.toLowerCase().includes(gFilterBy.toLowerCase())
+)
+  return filteredBooks
 }
 
 function removeBook(bookId) {
   const idx = gBooks.findIndex((book) => book.id === bookId)
   if (idx !== -1) gBooks.splice(idx, 1)
+  _saveBook()
 }
 
 function updateBook(bookId, key, newPrice) {
@@ -17,35 +26,40 @@ function updateBook(bookId, key, newPrice) {
   if (!book) return false
 
   if (!isValidPrice(newPrice)) {
-    alert('Please enter a valid positive number for the price!')
+    showMsg('Please enter a valid positive number for the price!')
   }
 
   book.price = newPrice
 }
 
-function addBook(title, price) {
-  if (!title) return
-  if (!isValidPrice(price)) return
-
+function addBook(title, price, imgUrl, description) {
+  
   const newBook = {
     id: makeid(),
     title: title,
-    price: price,
+    price:price,
+    imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
+    description:description || 'Description not Found',
   }
 
   gBooks.unshift(newBook)
+  _saveBook()
+  return newBook
 }
 
 function getBookById(bookId) {
   return gBooks.find((book) => book.id === bookId)
 }
 
+function setFilterBy(filterBy) {
+    gFilterBy = filterBy
+}
+
 function formatBookDetails(bookId) {
   const elCoverImg = document.querySelector('.book-cover-img')
-  const book = getBookById(bookId) // Assuming you have a function to fetch book details by ID
-
+  const book = getBookById(bookId) 
   if (!book) {
-    alert(`Book with id ${bookId} not found.`)
+    showMsg(`Book with id ${bookId} not found.`)
     return ''
   }
 
@@ -61,7 +75,6 @@ function _saveBook() {
 }
 
 function _createBooks() {
-
   gBooks = []
   if (gBooks && gBooks.length > 0) return
 
@@ -112,7 +125,7 @@ Zorba has been acclaimed as one of the truly memorable creations of literatureâ€
 Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakisâ€™s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`
     ),
   ]
- _saveBook()
+  _saveBook()
 }
 
 function _createBook(title, price, imgUrl, description) {
@@ -120,7 +133,7 @@ function _createBook(title, price, imgUrl, description) {
     id: makeid(),
     title,
     price,
-    imgUrl: imgUrl || 'jpg/eror.jpg',
-    description: description || 'Description not Found'
+    imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
+    description: description || 'Description not Found',
   }
 }

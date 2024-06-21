@@ -8,18 +8,23 @@ function onInit() {
 
 function renderBooks() {
   const elBooksList = document.querySelector('tbody')
-
   const books = getBooks()
+  
+    if (!books.length) {
+      elBooksContainer.innerHTML = `<tr>
+   <td colspan="4">No matching books were found...</td>
+     </tr>`
+      return
+    }
 
-  const srtHtml = books
-    .map(
-      (book, idx) => `
+  const srtHtml = books.map((book, idx) => `
         <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
+   <td>${book.id}</td>
    <td>${book.title}</td>
    <td>${book.price}</td>
    <td>
-   <button class="read" onclick ="onShowDetails(event, '${book.id}')">Read</button>
-   <button class="update"  onclick="onUpdateBook('${book.id}')">Update</button>
+   <button class="read" onclick ="onShowDetails( '${book.id}')">Read</button>
+   <button class="update"  onclick="onUpdateBook('${book.id}', 'price')">Update price</button>
    <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
    </td>
    </tr>
@@ -31,48 +36,90 @@ function renderBooks() {
   elBooksList.innerHTML = srtHtml
 }
 
-// CR here
+//Remove
 function onRemoveBook(bookId) {
   const isComfirmed = confirm('are you sure you want to delete?')
 
   if (!isComfirmed) {
-    alert('ok im not removing')
+    showMsg('OK! Not removing')
     return
   }
-  alert('delete ')
   removeBook(bookId)
   renderBooks()
+  showMsg('Deleted')
 }
 
 // Update
 function onUpdateBook(bookId, key) {
   const book = getBookById(bookId)
-  const newPrice = +prompt('Enter a new price ' + book.price)
-  if (!newPrice || newPrice <= 0) return alert('You must add valid price')
+  
+  let value = prompt('Update the book ' + key + ' is now '+  book[key])
 
-  updateBook(bookId, key, newPrice)
+  if(typeof book[key] === 'number'){
+    value = parseInt(value)
+  }
+  if (!value) return showMsg('A book must have ' + key)
+
+  // const newPrice = +prompt('Enter a new price ' + book.price)
+  // if (!newPrice || newPrice <= 0) return alert('You must add valid price')
+
+  updateBook(bookId, key, value)
   renderBooks()
+  showMsg('Updated')
 }
 
 // Create - with Propmts
 function onAddBook() {
   const bookName = prompt('What`s the book`s name?')
   const bookPrice = +prompt('What`s the book`s price?')
+  const imgUrl = prompt('What`s the book`s imgUrl?')
+  const description = prompt('What`s the book`s description?')
 
-  addBook(bookName, bookPrice)
+  if (!bookName || !isValidPrice(bookPrice)) {
+    return alert('Please make sure to enter all required book details properly.')
+  }
+  
+  
+  
+  addBook(bookName, bookPrice, imgUrl, description)
   renderBooks()
+  showMsg('Added')
 }
 
 // Get
-function onShowDetails(ev, bookId) {
-  ev.stopPropagation()
-  const elDetails = document.querySelector('.book-details')
-  const elPre = elDetails.querySelector('.book-details pre')
+function onShowDetails(bookId) {
+  const elBookModal = document.querySelector('.book-details')
+
   const book = getBookById(bookId)
 
-  //call function in the service that represent the book details
-  const formattedDetails = formatBookDetails(bookId)
+  elBookModal.querySelector('.book-cover-img img').src = book.imgUrl
+  elBookModal.querySelector('.book-desc h3').innerText = book.title
+  elBookModal.querySelector('.book-desc p').innerText = book.description
+  elBookModal.showModal()
+}
 
-  elPre.innerText = formattedDetails
-  elDetails.showModal()
+function onSetFilterBy(elInput) {
+  const filterBy = elInput.value
+  if (filterBy) setFilterBy(filterBy)
+
+  renderBooks()
+}
+
+function onResetFilter() {
+  setFilterBy('')
+  renderBooks()
+
+  const elTitle = document.querySelector('.book-title')
+  elTitle.value = ''
+}
+
+function showMsg(action) {
+  const msg = action
+  const elMsg = document.querySelector('.user-msg')
+  elMsg.innerText = msg
+  elMsg.classList.remove('hide')
+
+  setTimeout(() => {
+    elMsg.classList.add('hide')
+  }, 5000)
 }
