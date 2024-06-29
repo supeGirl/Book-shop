@@ -135,5 +135,7 @@ function _createBook(title, price, imgUrl, description) {
     price,
     imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
     description: description || 'Description not Found',
+    rating: 0,
+
   }
 }
