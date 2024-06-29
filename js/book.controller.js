@@ -11,7 +11,7 @@ function renderBooks() {
   const books = getBooks()
   
     if (!books.length) {
-      elBooksContainer.innerHTML = `<tr>
+      elBooksList.innerHTML = `<tr>
    <td colspan="4">No matching books were found...</td>
      </tr>`
       return
@@ -26,6 +26,7 @@ function renderBooks() {
    <button class="read" onclick ="onShowDetails( '${book.id}')">Read</button>
    <button class="update"  onclick="onUpdateBook('${book.id}', 'price')">Update price</button>
    <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
+   <td>${book.rating}</td>
    </td>
    </tr>
 

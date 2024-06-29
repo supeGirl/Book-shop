@@ -122,7 +122,8 @@ First published in 1946, Zorba the Greek, is, on one hand, the story of a Greek 
 
 Zorba has been acclaimed as one of the truly memorable creations of literature—a character created on a huge scale in the tradition of Falstaff and Sancho Panza. His years have not dimmed the gusto and amazement with which he responds to all life offers him, whether he is working in the mine, confronting mad monks in a mountain monastery, embellishing the tales of his life or making love to avoid sin. Zorba’s life is rich with all the joys and sorrows that living brings and his example awakens in the narrator an understanding of the true meaning of humanity. This is one of the greatest life-affirming novels of our time.
 
-Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakis’s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`
+Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakis’s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`,
+
     ),
   ]
   _saveBook()
@@ -135,7 +136,7 @@ function _createBook(title, price, imgUrl, description) {
     price,
     imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
     description: description || 'Description not Found',
-    rating: 0,
+    rating: getRandomInt(1,6),
 
   }
 }
