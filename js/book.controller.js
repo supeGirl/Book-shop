@@ -8,7 +8,7 @@ const gQueryOptions = {
 
 function onInit() {
   _createBooks()
-
+  readQueryParams()
   renderBooks()
 }
 
@@ -27,7 +27,6 @@ function renderBooks() {
     .map(
       (book, idx) => `
         <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
-   <td>${book.id}</td>
    <td>${book.title}</td>
    <td>${book.price}</td>
    <td>
@@ -43,6 +42,7 @@ function renderBooks() {
     .join('')
 
   elBooksList.innerHTML = srtHtml
+  setQueryParams()
 }
 
 //Remove
@@ -85,7 +85,7 @@ function onAddBook() {
   const description = prompt('What`s the book`s description?')
 
   if (!bookName || !isValidPrice(bookPrice)) {
-    return alert('Please make sure to enter all required book details properly.')
+    return showMsg('Please make sure to enter all required book details properly.')
   }
 
   addBook(bookName, bookPrice, imgUrl, description)
@@ -141,4 +141,34 @@ function showMsg(action) {
   setTimeout(() => {
     elMsg.classList.add('hide')
   }, 5000)
+}
+
+function readQueryParams() {
+  const queryParams = new URLSearchParams(window.location.search)
+
+  gQueryOptions.filterBy = {
+      txt: queryParams.get('txt') || '',
+      minRating: +queryParams.get('minRating') || 0
+  }
+  renderQueryParams()
+}
+
+function renderQueryParams() {
+
+  document.querySelector('.filter-txt').value = gQueryOptions.filterBy.txt
+  document.querySelector('.filter-rating').value = gQueryOptions.filterBy.minRating
+}
+
+function setQueryParams() {
+  const queryParams = new URLSearchParams()
+
+  queryParams.set('txt', gQueryOptions.filterBy.txt)
+  queryParams.set('minRating', gQueryOptions.filterBy.minRating)
+
+  const newUrl =
+      window.location.protocol + "//" +
+      window.location.host +
+      window.location.pathname + '?' + queryParams.toString()
+
+  window.history.pushState({ path: newUrl }, '', newUrl)
 }

@@ -29,6 +29,7 @@
               <select onchange="onSetSortBy(this)">
                   <option value="">Select Sorting</option>
                   <option value="title">By Title</option>
+                  <option value="price">By Price</option>
                   <option value="rating">By Rating</option>
               </select>
               <label>
@@ -41,22 +42,7 @@
 
     <section class="main-container">
 
-      <!-- <section class="filter-book">
-        <form>
-          <label>
-            Search by title
-            <input
-              oninput="onSetFilterBy(this)"
-              class="book-title"
-              type="text"
-              placeholder="Book title"
-              name="by-title"
-            />
-          </label>
-        </form> -->
-
   <div class="functionality-btns">
-    <!-- <button class="reset-filter" onclick="onResetFilter()">Reset filters</button> -->
     <button class="add-book" onclick="onAddBook()">Add another book</button>
   </div>
 </section>
@@ -64,7 +50,6 @@
       <table class="books-list">
         <thead class="head-table">
           <tr>
-            <th>ID</th>
             <th>Title</th>
             <th>Price</th>
             <th>Actions</th>
