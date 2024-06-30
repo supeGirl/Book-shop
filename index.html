@@ -11,9 +11,37 @@
       <h1>Welcome to my Book-Shop</h1>
     </header>
 
+    <section class="sorting-filter">
+      <fieldset>
+          <legend>Filter & Sorting</legend>
+
+          <div class="filter-by">
+              <input class="filter-txt" type="text" placeholder="filter" oninput="onSetFilterBy({ txt: this.value })">
+              <label>
+                  <span>Min Rating:</span>
+                  <input type="range" min="0" max="5" value="0" class="filter-rating"
+                      onchange="this.title=this.value;onSetFilterBy({ minRating: +this.value })" />
+              </label>
+              <button onclick="onResetFilter()">Clear</button>
+          </div>
+
+          <div class="sort-by">
+              <select onchange="onSetSortBy(this)">
+                  <option value="">Select Sorting</option>
+                  <option value="title">By Title</option>
+                  <option value="rating">By Rating</option>
+              </select>
+              <label>
+                  <span>Descending</span>
+                  <input class="sort-desc" type="checkbox" oninput="onSetSortDir(this)" />
+              </label>
+          </div>
+      </fieldset>
+  </section>
+
     <section class="main-container">
-      
-      <section class="filter-book">
+
+      <!-- <section class="filter-book">
         <form>
           <label>
             Search by title
@@ -25,10 +53,10 @@
               name="by-title"
             />
           </label>
-        </form>
+        </form> -->
 
-  <div>
-    <button class="reset-filter" onclick="onResetFilter()">Reset filters</button>
+  <div class="functionality-btns">
+    <!-- <button class="reset-filter" onclick="onResetFilter()">Reset filters</button> -->
     <button class="add-book" onclick="onAddBook()">Add another book</button>
   </div>
 </section>

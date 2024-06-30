@@ -1,5 +1,11 @@
 'use strict'
 
+const gQueryOptions = {
+  filterBy: {txt: '', minRating: 0},
+  sortBy: {sortField: '', sortDir: 1}, // {vendor : -1}
+  page: {idx: 0, size: 4},
+}
+
 function onInit() {
   _createBooks()
 
@@ -8,16 +14,18 @@ function onInit() {
 
 function renderBooks() {
   const elBooksList = document.querySelector('tbody')
-  const books = getBooks()
-  
-    if (!books.length) {
-      elBooksList.innerHTML = `<tr>
+  const books = getBooks(gQueryOptions)
+
+  if (!books.length) {
+    elBooksList.innerHTML = `<tr>
    <td colspan="4">No matching books were found...</td>
      </tr>`
-      return
-    }
+    return
+  }
 
-  const srtHtml = books.map((book, idx) => `
+  const srtHtml = books
+    .map(
+      (book, idx) => `
         <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
    <td>${book.id}</td>
    <td>${book.title}</td>
@@ -53,10 +61,10 @@ function onRemoveBook(bookId) {
 // Update
 function onUpdateBook(bookId, key) {
   const book = getBookById(bookId)
-  
-  let value = prompt('Update the book ' + key + ' is now '+  book[key])
 
-  if(typeof book[key] === 'number'){
+  let value = prompt('Update the book ' + key + ' is now ' + book[key])
+
+  if (typeof book[key] === 'number') {
     value = parseInt(value)
   }
   if (!value) return showMsg('A book must have ' + key)
@@ -79,9 +87,7 @@ function onAddBook() {
   if (!bookName || !isValidPrice(bookPrice)) {
     return alert('Please make sure to enter all required book details properly.')
   }
-  
-  
-  
+
   addBook(bookName, bookPrice, imgUrl, description)
   renderBooks()
   showMsg('Added')
@@ -99,19 +105,31 @@ function onShowDetails(bookId) {
   elBookModal.showModal()
 }
 
-function onSetFilterBy(elInput) {
-  const filterBy = elInput.value
-  if (filterBy) setFilterBy(filterBy)
+function onSetFilterBy(filterBy) {
+
+  console.log('filterBy: ', filterBy)
+
+  if(filterBy.txt !== undefined) {
+      gQueryOptions.filterBy.txt = filterBy.txt
+  }
+
+  if(filterBy.minRating !== undefined) {
+      gQueryOptions.filterBy.minRating = filterBy.minRating
+  }
 
   renderBooks()
+  return
 }
 
 function onResetFilter() {
-  setFilterBy('')
-  renderBooks()
+ const elFilterTxt = document.querySelector('.filter-txt')
+ const elFilterRating = document.querySelector('.filter-rating')
 
-  const elTitle = document.querySelector('.book-title')
-  elTitle.value = ''
+ elFilterTxt.value =''
+ elFilterRating.value = 0
+ 
+ gQueryOptions.filterBy = {txt : '', minRating: 0}
+ renderBooks()
 }
 
 function showMsg(action) {

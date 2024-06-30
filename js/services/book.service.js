@@ -1,17 +1,28 @@
 'use strict'
 
-var gBooks = []
-var gFilterBy = ''
+var gBooks
+
+_createBooks()
 
 // !always save to storage after CRUD
 
+function getBooks(gQueryOptions) {
+  const filterBy = gQueryOptions.filterBy
+  console.log(filterBy);
 
-function getBooks() {
-  if (!gFilterBy) return gBooks
+  var books = gBooks
+  if (filterBy.txt) {
+    books = books.filter((book) => {
+      const title = book.title.toLowerCase()
+      const filterTxt = filterBy.txt.toLowerCase()
+      return title.includes(filterTxt)
+    })
+  }
+  if(filterBy.minRating) {
+    books = books.filter(book => book.rating >= filterBy.minRating)
+}
 
-  var filteredBooks  = gBooks.filter((book) =>  book.title.toLowerCase().includes(gFilterBy.toLowerCase())
-)
-  return filteredBooks
+  return books
 }
 
 function removeBook(bookId) {
@@ -20,7 +31,7 @@ function removeBook(bookId) {
   _saveBook()
 }
 
-function updateBook(bookId, key, newPrice) {
+function updateBook(bookId, key, value) {
   const book = getBookById(bookId)
 
   if (!book) return false
@@ -30,34 +41,37 @@ function updateBook(bookId, key, newPrice) {
   }
 
   book.price = newPrice
+
+  _saveBooks()
 }
 
+//CR dont save new book to localStorage after refresh
 function addBook(title, price, imgUrl, description) {
-  
-  const newBook = {
-    id: makeid(),
-    title: title,
-    price:price,
-    imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
-    description:description || 'Description not Found',
-  }
+  const newBook = _createBook(title, price, imgUrl, description)
+
+  // const newBook = {
+  //   id: makeId(),
+  //   title: title,
+  //   price:price,
+  //   imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
+  //   description:description || 'Description not Found',
+  // }
 
   gBooks.unshift(newBook)
   _saveBook()
-  return newBook
 }
 
 function getBookById(bookId) {
   return gBooks.find((book) => book.id === bookId)
 }
 
-function setFilterBy(filterBy) {
-    gFilterBy = filterBy
+function setFilterBy(input) {
+  return gBooks.filter((book) => book.title.toLowerCase().startsWith(input.toLowerCase()))
 }
 
 function formatBookDetails(bookId) {
   const elCoverImg = document.querySelector('.book-cover-img')
-  const book = getBookById(bookId) 
+  const book = getBookById(bookId)
   if (!book) {
     showMsg(`Book with id ${bookId} not found.`)
     return ''
@@ -75,8 +89,8 @@ function _saveBook() {
 }
 
 function _createBooks() {
-  gBooks = []
-  if (gBooks && gBooks.length > 0) return
+  gBooks = loadFromStorage('books') || []
+  if (gBooks.length > 0) return
 
   gBooks = [
     _createBook(
@@ -122,8 +136,7 @@ First published in 1946, Zorba the Greek, is, on one hand, the story of a Greek 
 
 Zorba has been acclaimed as one of the truly memorable creations of literature—a character created on a huge scale in the tradition of Falstaff and Sancho Panza. His years have not dimmed the gusto and amazement with which he responds to all life offers him, whether he is working in the mine, confronting mad monks in a mountain monastery, embellishing the tales of his life or making love to avoid sin. Zorba’s life is rich with all the joys and sorrows that living brings and his example awakens in the narrator an understanding of the true meaning of humanity. This is one of the greatest life-affirming novels of our time.
 
-Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakis’s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`,
-
+Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakis’s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`
     ),
   ]
   _saveBook()
@@ -131,12 +144,11 @@ Part of the modern literary canon, Zorba the Greek, has achieved widespread inte
 
 function _createBook(title, price, imgUrl, description) {
   return {
-    id: makeid(),
+    id: makeId(),
     title,
     price,
-    imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
+    imgUrl: imgUrl || 'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
     description: description || 'Description not Found',
-    rating: getRandomInt(1,6),
-
+    rating: getRandomIntInclusive(1, 6),
   }
 }

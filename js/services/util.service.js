@@ -1,6 +1,6 @@
 'use strict'
 
-function makeid(length = 5) {
+function makeId(length = 5) {
   var id = ''
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
@@ -15,6 +15,13 @@ function getRandomInt(min, max) {
   const maxFloored = Math.floor(max)
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled) // The maximum is exclusive and the minimum is inclusive
 }
+
+function getRandomIntInclusive(min, max) {
+	const minCeiled = Math.ceil(min)
+	const maxFloored = Math.floor(max)
+	return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled) // The maximum is inclusive and the minimum is inclusive
+}
+
 
 function isValidPrice(price) {
   return !isNaN(price) && price > 0
