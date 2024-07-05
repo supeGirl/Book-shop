@@ -8,22 +8,51 @@ _createBooks()
 
 function getBooks(gQueryOptions) {
   const filterBy = gQueryOptions.filterBy
-  console.log(filterBy);
+  const sortBy = gQueryOptions.sortBy
 
   var books = gBooks
+
+  //first to filter and then sorting
+  // (can be in _filter(books, filterBy) &_sortBy(books, sortBy)`s)
+  
   if (filterBy.txt) {
     books = books.filter((book) => {
       const title = book.title.toLowerCase()
       const filterTxt = filterBy.txt.toLowerCase()
+
       return title.includes(filterTxt)
     })
   }
-  if(filterBy.minRating) {
-    books = books.filter(book => book.rating >= filterBy.minRating)
-}
+
+  if (filterBy.minRating) {
+    books = books.filter((book) => book.rating >= filterBy.minRating)
+  }
+
+  if(sortBy.sortField === 'title'){
+    books =books.toSorted((book1,book2) =>{
+     return  book1.title.localeCompare(book2.title) * sortBy.sortDir
+      } )
+  }
+  
+  if(sortBy.sortField === 'price'){
+   books = books =books.toSorted((book1,book2) => {
+    return ( book1.price -book2.price) * sortBy.sortDir
+
+    })
+  }
+
+  if(sortBy.sortField === 'rating'){
+   books = books =books.toSorted((book1,book2) => {
+    return ( book1.rating -book2.rating) * sortBy.sortDir
+
+    })
+  }
+
 
   return books
 }
+
+
 
 function removeBook(bookId) {
   const idx = gBooks.findIndex((book) => book.id === bookId)
@@ -45,17 +74,8 @@ function updateBook(bookId, key, value) {
   _saveBooks()
 }
 
-//CR dont save new book to localStorage after refresh
 function addBook(title, price, imgUrl, description) {
   const newBook = _createBook(title, price, imgUrl, description)
-
-  // const newBook = {
-  //   id: makeId(),
-  //   title: title,
-  //   price:price,
-  //   imgUrl: imgUrl ||'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
-  //   description:description || 'Description not Found',
-  // }
 
   gBooks.unshift(newBook)
   _saveBook()
@@ -70,6 +90,7 @@ function setFilterBy(input) {
 }
 
 function formatBookDetails(bookId) {
+  //dont DQS here!
   const elCoverImg = document.querySelector('.book-cover-img')
   const book = getBookById(bookId)
   if (!book) {
@@ -149,6 +170,6 @@ function _createBook(title, price, imgUrl, description) {
     price,
     imgUrl: imgUrl || 'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
     description: description || 'Description not Found',
-    rating: getRandomIntInclusive(1, 6),
+    rating: getRandomIntInclusive(1, 5),
   }
 }

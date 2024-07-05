@@ -7,7 +7,7 @@ const gQueryOptions = {
 }
 
 function onInit() {
-  _createBooks()
+
   readQueryParams()
   renderBooks()
 }
@@ -29,11 +29,11 @@ function renderBooks() {
         <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
    <td>${book.title}</td>
    <td>${book.price}</td>
+   <td>${book.rating}</td>
    <td>
    <button class="read" onclick ="onShowDetails( '${book.id}')">Read</button>
    <button class="update"  onclick="onUpdateBook('${book.id}', 'price')">Update price</button>
    <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
-   <td>${book.rating}</td>
    </td>
    </tr>
 
@@ -105,31 +105,38 @@ function onShowDetails(bookId) {
   elBookModal.showModal()
 }
 
-function onSetFilterBy(filterBy) {
 
+function onSetFilterBy(filterBy) {
   console.log('filterBy: ', filterBy)
 
-  if(filterBy.txt !== undefined) {
-      gQueryOptions.filterBy.txt = filterBy.txt
-  }
-
-  if(filterBy.minRating !== undefined) {
-      gQueryOptions.filterBy.minRating = filterBy.minRating
-  }
-
+  if (filterBy.txt !== undefined) gQueryOptions.filterBy.txt = filterBy.txt
+  if (filterBy.minRating !== undefined) gQueryOptions.filterBy.minRating = filterBy.minRating
   renderBooks()
   return
 }
 
 function onResetFilter() {
- const elFilterTxt = document.querySelector('.filter-txt')
- const elFilterRating = document.querySelector('.filter-rating')
+  const elFilterTxt = document.querySelector('.filter-txt')
+  const elFilterRating = document.querySelector('.filter-rating')
 
- elFilterTxt.value =''
- elFilterRating.value = 0
- 
- gQueryOptions.filterBy = {txt : '', minRating: 0}
- renderBooks()
+  elFilterTxt.value = ''
+  elFilterRating.value = 0
+
+  gQueryOptions.filterBy = {txt: '', minRating: 0}
+  renderBooks()
+}
+
+function onSetSortBy(elSortField) {
+  console.log('elSortField',elSortField.value);
+
+  gQueryOptions.sortBy.sortField = elSortField.value
+  renderBooks()
+}
+
+function onSetSortDir(elSortDir) {
+  const sortDir = elSortDir.checked ? -1 : 1
+  gQueryOptions.sortBy.sortDir = sortDir
+  renderBooks()
 }
 
 function showMsg(action) {
@@ -147,14 +154,13 @@ function readQueryParams() {
   const queryParams = new URLSearchParams(window.location.search)
 
   gQueryOptions.filterBy = {
-      txt: queryParams.get('txt') || '',
-      minRating: +queryParams.get('minRating') || 0
+    txt: queryParams.get('txt') || '',
+    minRating: +queryParams.get('minRating') || 0,
   }
   renderQueryParams()
 }
 
 function renderQueryParams() {
-
   document.querySelector('.filter-txt').value = gQueryOptions.filterBy.txt
   document.querySelector('.filter-rating').value = gQueryOptions.filterBy.minRating
 }
@@ -166,9 +172,7 @@ function setQueryParams() {
   queryParams.set('minRating', gQueryOptions.filterBy.minRating)
 
   const newUrl =
-      window.location.protocol + "//" +
-      window.location.host +
-      window.location.pathname + '?' + queryParams.toString()
+    window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + queryParams.toString()
 
-  window.history.pushState({ path: newUrl }, '', newUrl)
+  window.history.pushState({path: newUrl}, '', newUrl)
 }
