@@ -1,6 +1,7 @@
 'use strict'
 
 var gBooks
+var gFilterBy = ''
 
 _createBooks()
 
@@ -16,19 +17,42 @@ function getBooks(gQueryOptions) {
   const page = gQueryOptions.page
   const startIdx = page.idx * page.size
   const endIdx = startIdx + page.size
-  books = books.slice(startIdx, endIdx + page.size)
+  books = books.slice(startIdx, endIdx)
 
   return books
 }
 
 function nextPage(gQueryOptions) {
-  var pageIdx = gQueryOptions.page.idx
-  var pageSize = gQueryOptions.page.size
-  if(pageIdx * pageSize >= gBooks.length){
+  const pageIdx = gQueryOptions.page.idx
+  const pageCount = getPageCount(gQueryOptions)
+  console.log('pageCount', pageCount)
+
+  if (pageIdx === pageCount - 1) {
     gQueryOptions.page.idx = 0
-  }else{
+  } else {
     gQueryOptions.page.idx++
   }
+}
+
+function prevPage(gQueryOptions) {
+  const pageIdx = gQueryOptions.page.idx
+  const pageCount = getPageCount(gQueryOptions)
+  if (pageIdx === 0) {
+    gQueryOptions.page.idx = pageCount - 1  
+  } else {
+    gQueryOptions.page.idx--
+  }
+}
+
+function getPageCount(gQueryOptions) {
+  const filterBy = gQueryOptions.filterBy
+  const page = gQueryOptions.page
+
+  var booksLength = _filter(gBooks, filterBy).length
+  console.log('booksLength:', booksLength)
+
+  var pageCount = Math.ceil(booksLength / page.size)
+  return pageCount
 }
 
 function removeBook(bookId) {
@@ -83,7 +107,11 @@ Description:${book.description}`
 }
 
 function _filter(books, filterBy) {
+  console.log('filterBY', filterBy)
+
   if (filterBy.txt) {
+    console.log('filterBy.txt', filterBy.txt)
+
     books = books.filter((book) => {
       const title = book.title.toLowerCase()
       const filterTxt = filterBy.txt.toLowerCase()
@@ -99,19 +127,14 @@ function _filter(books, filterBy) {
 
 function _sort(books, sortBy) {
   if (sortBy.sortField === 'title') {
+    console.log('title')
     books = books.toSorted((book1, book2) => {
       return book1.title.localeCompare(book2.title) * sortBy.sortDir
     })
   }
-
-  if (sortBy.sortField === 'price') {
-    books = books = books.toSorted((book1, book2) => {
-      return (book1.price - book2.price) * sortBy.sortDir
-    })
-  }
-
   if (sortBy.sortField === 'rating') {
-    books = books = books.toSorted((book1, book2) => {
+    console.log('rating')
+    books = books.toSorted((book1, book2) => {
       return (book1.rating - book2.rating) * sortBy.sortDir
     })
   }

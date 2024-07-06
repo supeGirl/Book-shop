@@ -26,7 +26,7 @@
           </div>
 
           <div class="sort-by">
-              <select onchange="onSetSortBy(this.value)">
+              <select onchange="onSetSortBy(this)">
                   <option value="default">Select Sorting</option>
                   <option value="title">By Title</option>
                   <option value="price">By Price</option>
@@ -34,7 +34,8 @@
               </select>
               <label>
                   <span>Descending</span>
-                  <input class="sort-desc" type="checkbox" oninput="onSetSortDir(this)" />              </label>
+                  <input class="sort-desc" type="checkbox" oninput="onSetSortDir(this)" />       
+                       </label>
                 
                 <div class="functionality-btns">
                   <button class="add-book" onclick="onAddBook()">Add another book</button>
@@ -55,16 +56,16 @@
         <thead class="head-table">
           <tr>
             <td>Title 
-              <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+              <!-- <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span> -->
             </td>
             <td>Price 
-               <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+               <!-- <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span> -->
             </td>
             <td>Rating
-               <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+               <!-- <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span> -->
             </td>
               <td>Actions</td>
             </tr>

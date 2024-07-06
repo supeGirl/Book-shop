@@ -196,12 +196,12 @@ function showMsg(action) {
 
 function onNextPage() {
   nextPage(gQueryOptions)
-
   renderBooks()
 }
 
 function onPrevPage() {
-  console.log('back...');
+ prevPage(gQueryOptions)
+ renderBooks()
 }
 
 function readQueryParams() {
