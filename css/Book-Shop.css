@@ -10,7 +10,13 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vw;
+  background-image: var(--body-color);
+  /* CR on this  */
+  /* background-repeat:no-repeat;
+  background-size: cover; 
+  background-size: 100% 100%;  */
+  
 }
 
 body {
@@ -24,7 +30,7 @@ body {
   width: 100vw;
   gap: 10px;
   overflow-x: hidden;
-  background-image: var(--body-color);
+
 }
 
 .title {
@@ -32,7 +38,22 @@ body {
 }
 
 header {
-  padding-block-end: 30px;
+  padding: 10px; 
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  max-width: 150px; 
+  height: 100%; 
+}
+
+h1 {
+  font-size: 24px; 
+  font-weight: normal; 
 }
 
 .functionality-btns {
@@ -228,7 +249,7 @@ button.delete {
 .page-btns {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1vw;
+  /* gap: 10px; */
 }
 .page-btns .prevPage {
   justify-self: end;
