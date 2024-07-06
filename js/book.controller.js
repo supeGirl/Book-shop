@@ -171,13 +171,13 @@ function onResetFilter() {
 }
 
 function onSetSortBy(elSortField) {
-  console.log('elSortField', elSortField.value)
 
   gQueryOptions.sortBy.sortField = elSortField.value
   renderBooks()
 }
 
 function onSetSortDir(elSortDir) {
+
   const sortDir = elSortDir.checked ? -1 : 1
   gQueryOptions.sortBy.sortDir = sortDir
   renderBooks()
@@ -196,12 +196,12 @@ function showMsg(action) {
 
 function onNextPage() {
   nextPage(gQueryOptions)
-
   renderBooks()
 }
 
 function onPrevPage() {
-  console.log('back...');
+ prevPage(gQueryOptions)
+ renderBooks()
 }
 
 function readQueryParams() {
