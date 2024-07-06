@@ -4,12 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="css/Book-Shop.css" />
+    <script src="https://kit.fontawesome.com/b83c7db8c3.js" crossorigin="anonymous"></script>
+
     <title>Book Shop</title>
   </head>
   <body onload="onInit()">
     <header>
-      <h1>Welcome to my Book-Shop</h1>
-    </header>
+    <div class="logo-container">
+      <img class="logo-img" src="jpg/logo.jpg" alt="logo">
+        <h1>Welcome to my Book-Shop</h1>
+      </header>
+    </div>
 
     <section class="sorting-filter">
       <fieldset>
@@ -38,12 +43,13 @@
                        </label>
                 
                 <div class="functionality-btns">
-                  <button class="add-book" onclick="onAddBook()">Add another book</button>
+                  <button class="add-book" onclick="onAddOrUpdateBook()">Add another book</button>
                   <button class="btn-option btn-table" onclick="onSetLayout('table')">
-                    <i class="fa-solid fa-grip-lines"></i>☰
+                    <i class="fa-solid fa-grip-lines"></i>
                   </button>
                   <button class="btn-option btn-cards" onclick="onSetLayout('cards')">
                     <i class="fa-solid fa-grip"></i>
+                    
               
                   </button>
                 </div>
@@ -77,26 +83,47 @@
       </div>
     </section>
 
+    <dialog class="book-edit-modal">
+      <form onsubmit="onSubmitBook()" method="dialog">
+          <h2>Enter the book's details:</h2>
+          <input class="book-title" type="text" placeholder="Title">
+          <input class="book-price" type="text" placeholder="Price">
+          <input class="book-img" type="text" placeholder="Book cover URL">
+          <input class="book-desc" type="text" placeholder="Book description">
+
+          <button>Submit</button>
+      </form>
+  </dialog>
+
     <dialog class="book-details">
       <form method="dialog">
+        <h3 class="title"></h3>
         <div class="book-cover-img">
           <img src="" />
         </div>
-  
+        
         <div class="book-desc">
-          <h3 class="title"></h3>
           <p class="desc"></p>  
           </div>
         </div>
-        <button class="close">✖</button>
+        <button class="close">✖</button> 
       </form>
     </dialog>
+
  <div class="page-btns">
    <button class="prevPage" onclick="onPrevPage()">Prev Page</button>
    <button class="nextPage" onclick="onNextPage()">Next Page</button>
   </div> 
 
    <div class="user-msg hide"></div>
+   <!-- <div class="user-msg-modal hide" >
+    <p class="confirm-msg">Are you sure?</p>
+    <div class="btn-container"> -->
+<!-- 
+      <button class="confirm-btn" onclick="onConfirmAction(true)">yes</button>
+      <button class="confirm-btn" onclick="onConfirmAction(false)">no</button>
+    </div>
+   </div> -->
 
     <script src="js/services/storage.servise.js"></script>
     <script src="js/services/util.service.js"></script>

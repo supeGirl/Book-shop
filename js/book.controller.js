@@ -2,6 +2,7 @@
 
 const LAYOUT_KEY = 'layout_db'
 var gLayout = loadFromStorage(LAYOUT_KEY) || 'table'
+var gEditBook = null
 
 const gQueryOptions = {
   filterBy: {txt: '', minRating: 0},
@@ -33,11 +34,11 @@ function renderBooks() {
   const strHTMLs = books.map((book, idx) => {
     return `       <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
                     <td>${book.title}</td>
-                    <td>$${book.price.toFixed(2)}</td>
+                    <td>$${book.price}</td>
                     <td>${book.rating}</td>
                     <td class="actions">
                         <button onclick="onShowDetails('${book.id}')" >Read</button>
-                         <button onclick="onUpdateBook('${book.id}', 'price')" >Update price</button>
+                         <button onclick="onAddOrUpdateBook('${book.id}')" >Update</button>
                         <button onclick="onRemoveBook('${book.id}')" >Delete</button>
                     </td>
                 </tr>`
@@ -69,7 +70,7 @@ function renderBooksCards(books) {
                 <p><strong>Desc:</strong> ${book.description}</p>
                 <div class="actions">
                     <button onclick="onShowDetails('${book.id}')" >Read</button>
-                    <button onclick="onUpdateBook('${book.id}', 'price')" >Update price</button>
+                    <button onclick="onAddOrUpdateBook('${book.id}')" >Update</button>
                     <button onclick="onRemoveBook('${book.id}')" >Delete</button>
                 </div>
             </div>`
@@ -97,39 +98,92 @@ function onRemoveBook(bookId) {
   showMsg('Deleted')
 }
 
-// Update
-function onUpdateBook(bookId, key) {
-  const book = getBookById(bookId)
+// Update with prompt 
+// function onUpdateBook(bookId, key) {
+//   const book = getBookById(bookId)
 
-  let value = prompt('Update the book ' + key + ' is now ' + book[key])
+//   let value = prompt('Update the book ' + key + ' is now ' + book[key])
 
-  if (typeof book[key] === 'number') {
-    value = parseInt(value)
+//   if (typeof book[key] === 'number') {
+//     value = parseInt(value)
+//   }
+//   if (!value) return showMsg('A book must have ' + key)
+
+//   // const newPrice = +prompt('Enter a new price ' + book.price)
+//   // if (!newPrice || newPrice <= 0) return alert('You must add valid price')
+
+//   updateBook(bookId, key, value)
+//   renderBooks()
+//   showMsg('Updated')
+// }
+
+// Create
+function onAddOrUpdateBook(bookId) {
+  const elBookModal = document.querySelector('.book-edit-modal')
+
+  const elTitle = elBookModal.querySelector('.book-title')
+  const elPrice = elBookModal.querySelector('.book-price')
+  const elImgUrl = elBookModal.querySelector('.book-img')
+  const elDesc = elBookModal.querySelector('.book-desc')
+
+  clearTextBoxes(elTitle, elPrice, elImgUrl, elDesc)
+
+  if (bookId) {
+    gEditBook =  getBookById(bookId)
+
+    elTitle.value = gEditBook.title
+    elPrice.value = gEditBook.price
+    elImgUrl.value = gEditBook.imgUrl
+    elDesc.value = gEditBook.description
   }
-  if (!value) return showMsg('A book must have ' + key)
+  elBookModal.showModal()
 
-  // const newPrice = +prompt('Enter a new price ' + book.price)
-  // if (!newPrice || newPrice <= 0) return alert('You must add valid price')
-
-  updateBook(bookId, key, value)
-  renderBooks()
-  showMsg('Updated')
 }
 
-// Create - with Propmts
-function onAddBook() {
-  const bookName = prompt('What`s the book`s name?')
-  const bookPrice = +prompt('What`s the book`s price?')
-  const imgUrl = prompt('What`s the book`s imgUrl?')
-  const description = prompt('What`s the book`s description?')
+function onSubmitBook() {
+  const elBookModal = document.querySelector('.book-edit-modal')
 
-  if (!bookName || !isValidPrice(bookPrice)) {
-    return showMsg('Please make sure to enter all required book details properly.')
+  const elTitle = elBookModal.querySelector('.book-title')
+  const elPrice = elBookModal.querySelector('.book-price')
+  const elImgUrl = elBookModal.querySelector('.book-img')
+  const elDesc = elBookModal.querySelector('.book-desc')
+  
+
+  if (!elTitle.value && !elPrice.value) {
+    // showMsg('Please make sure to enter all required book details properly.')
+    showMsg('Book was not added')
+    clearTextBoxes(elTitle, elPrice, elImgUrl, elDesc)
+    return
   }
 
-  addBook(bookName, bookPrice, imgUrl, description)
-  renderBooks()
-  showMsg('Added')
+  if (gEditBook) {
+    var newBookDet = {
+      title: gEditBook.title,
+      price: gEditBook.price,
+      imgUrl: gEditBook.imgUrl,
+      description: gEditBook.description
+
+    }
+    console.log('newBookDet', newBookDet)
+    
+    updateBook(gEditBook.id, newBookDet)
+    showMsg('Book updated successfully')
+  } else {
+    addBook(elTitle.value, elPrice.value, elImgUrl.value, elDesc.value)
+    showMsg('Book added successfully')
+  }
+  gEditBook = null
+  clearTextBoxes(elTitle, elPrice, elImgUrl, elDesc)
+  elBookModal.close()
+  renderBooks(gBooks)
+  
+}
+
+function clearTextBoxes(elTitle, elPrice, elImgUrl, elDesc) {
+  elTitle.value = ''
+  elPrice.value = ''
+  elImgUrl.value = ''
+  elDesc.value = ''
 }
 
 // Get
@@ -139,7 +193,7 @@ function onShowDetails(bookId) {
   const book = getBookById(bookId)
 
   elBookModal.querySelector('.book-cover-img img').src = book.imgUrl
-  elBookModal.querySelector('.book-desc h3').innerText = book.title
+  elBookModal.querySelector('h3').innerText = book.title
   elBookModal.querySelector('.book-desc p').innerText = book.description
   elBookModal.showModal()
 }
@@ -171,13 +225,11 @@ function onResetFilter() {
 }
 
 function onSetSortBy(elSortField) {
-
   gQueryOptions.sortBy.sortField = elSortField.value
   renderBooks()
 }
 
 function onSetSortDir(elSortDir) {
-
   const sortDir = elSortDir.checked ? -1 : 1
   gQueryOptions.sortBy.sortDir = sortDir
   renderBooks()
@@ -194,14 +246,34 @@ function showMsg(action) {
   }, 5000)
 }
 
+// confirm function that not work yet
+// function onConfirmAction(confirmed, action) {
+//  const elConfirm = document.querySelector('.user-msg-modal')
+//   const msg = action
+
+//   elConfirm.innerText = msg
+//   elConfirm.classList.remove('hide')
+
+//   if (confirmed) {
+//     console.log('true')
+//     elConfirm.classList.add('hide')
+//     return true
+//   }else{
+//     console.log('false')
+//     elConfirm.classList.add('hide')
+//     return false
+//   }
+  
+// }
+
 function onNextPage() {
   nextPage(gQueryOptions)
   renderBooks()
 }
 
 function onPrevPage() {
- prevPage(gQueryOptions)
- renderBooks()
+  prevPage(gQueryOptions)
+  renderBooks()
 }
 
 function readQueryParams() {

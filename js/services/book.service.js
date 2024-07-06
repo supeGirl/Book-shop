@@ -58,28 +58,27 @@ function getPageCount(gQueryOptions) {
 function removeBook(bookId) {
   const idx = gBooks.findIndex((book) => book.id === bookId)
   if (idx !== -1) gBooks.splice(idx, 1)
-  _saveBook()
+  saveToStorage('books', gBooks)
 }
 
-function updateBook(bookId, key, value) {
+function updateBook(bookId,newBookDetails) {
+  console.log('newBookDetails', newBookDetails)
+  
   const book = getBookById(bookId)
 
-  if (!book) return false
+  if (newBookDetails.title !== undefined) book.title = newBookDetails.title
+	if (newBookDetails.price !== undefined) book.price = newBookDetails.price
+	if (newBookDetails.imgUrl !== undefined) book.imgUrl = newBookDetails.imgUrl
+	if (newBookDetails.rating !== undefined) book.rating = newBookDetails.rating
 
-  if (!isValidPrice(value)) {
-    showMsg('Please enter a valid positive number for the price!')
-  }
-
-  book.price = value
-
-  _saveBooks()
+  saveToStorage('books', gBooks)
 }
 
 function addBook(title, price, imgUrl, description) {
   const newBook = _createBook(title, price, imgUrl, description)
 
   gBooks.unshift(newBook)
-  _saveBook()
+  saveToStorage('books', gBooks)
 }
 
 function getBookById(bookId) {
@@ -141,9 +140,6 @@ function _sort(books, sortBy) {
   return books
 }
 
-function _saveBook() {
-  saveToStorage('books', gBooks)
-}
 
 function _createBooks() {
   gBooks = loadFromStorage('books') || []
@@ -196,7 +192,7 @@ Zorba has been acclaimed as one of the truly memorable creations of literatureâ€
 Part of the modern literary canon, Zorba the Greek, has achieved widespread international acclaim and recognition. This new edition translated, directly from Kazantzakisâ€™s Greek original, is a more faithful rendition of his original language, ideas, and story, and presents Zorba as the author meant him to be.`
     ),
   ]
-  _saveBook()
+  saveToStorage('books', gBooks)
 }
 
 function _createBook(title, price, imgUrl, description) {

@@ -4,13 +4,15 @@
 :root {
   --modal-color: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
   --body-color: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  --margin-from-text: 1em;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100vh;
+  background-image: var(--body-color);
 }
 
 body {
@@ -24,7 +26,6 @@ body {
   width: 100vw;
   gap: 10px;
   overflow-x: hidden;
-  background-image: var(--body-color);
 }
 
 .title {
@@ -32,7 +33,35 @@ body {
 }
 
 header {
-  padding-block-end: 30px;
+  padding: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  max-width: 150px;
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+
+  font-size: 24px;
+  font-weight: normal;
+}
+
+p{
+  margin: 0;
+  text-wrap: pretty;
+
 }
 
 .functionality-btns {
@@ -46,11 +75,9 @@ header {
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
-  padding: 10px 0px;
-  gap: 30px;
-  min-width: 790px;
+  gap: 20px;
+  padding: 10px;
 }
 
 .book-card {
@@ -113,16 +140,15 @@ td {
   border: 0;
   padding: 0;
   background-image: var(--modal-color);
-  border-radius: 15px;
-  border: 1px solid #00000030;
   color: rgb(0, 0, 0);
-  width: 80%;
+  width: 85%;
   font-size: 20px;
+  max-height: 80%;
 }
 
 .book-details form {
   padding: 30px 20px;
-  display: flex;
+  columns: 2 200px;
   justify-content: center;
   align-items: center;
   gap: 40px;
@@ -136,17 +162,17 @@ td {
   gap: 20px;
 }
 
-.book-cover-img {
-  max-width: 100%;
+.title {
+  column-span: all;
+  font-size: 25px;
+  font-weight: 500;
 }
 
 .book-cover-img img {
-  position: relative;
-  max-width: 90%;
-  height: auto;
-  border-radius: 10px;
-  left: 10px;
-  top: 0;
+  display: block;
+  max-width: 100%;
+  grid-template-areas: 1/-2;
+  margin-inline-start: var(--slide-out);
   box-shadow: 5px 5px 50px -1px #ffffff;
 }
 
@@ -157,21 +183,18 @@ td {
   position: relative;
 }
 
-.book-desc .title {
-  font-size: 25px;
-  font-weight: 500;
-  margin: 0;
-}
 
 .book-desc .desc {
   margin: 0;
 }
+
 .close {
   position: absolute;
-  right: 20px;
-  top: 10px;
+  right: 2px;
+  top: 2px;
   font-size: large;
   cursor: pointer;
+  background-color: lightgoldenrodyellow;
 }
 
 button {
@@ -205,6 +228,17 @@ button.update {
 button.delete {
   background-color: rgb(252, 146, 65);
 }
+.btn-option {
+  border: none;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.layout-box-btn {
+  max-width: 15px;
+  height: 100%;
+}
 
 .filter-book {
   display: flex;
@@ -214,12 +248,20 @@ button.delete {
 }
 
 .user-msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: rgb(87, 204, 247);
-  padding: 10px;
-  border-radius: 4px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 300px;
+  text-align: center;
 }
 
 .hide {
@@ -228,7 +270,7 @@ button.delete {
 .page-btns {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1vw;
+  gap: 10px;
 }
 .page-btns .prevPage {
   justify-self: end;
@@ -236,3 +278,24 @@ button.delete {
 .page-btns .nextPage {
   justify-self: start;
 }
+
+/* .confirm-msg {
+  font-size: 18px; 
+  margin-bottom: 10px; 
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+}
+
+.confirm-btn {
+  border: none;
+  background-color: #65a9d7; 
+  color: white; 
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
