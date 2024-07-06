@@ -1,13 +1,15 @@
 'use strict'
 
+const LAYOUT_KEY = 'layout_db'
+var gLayout = loadFromStorage(LAYOUT_KEY) || 'table'
+
 const gQueryOptions = {
   filterBy: {txt: '', minRating: 0},
   sortBy: {sortField: '', sortDir: 1}, // {vendor : -1}
-  page: {idx: 0, size: 4},
+  page: {idx: 0, size: 5},
 }
 
 function onInit() {
-
   readQueryParams()
   renderBooks()
 }
@@ -16,6 +18,11 @@ function renderBooks() {
   const elBooksList = document.querySelector('tbody')
   const books = getBooks(gQueryOptions)
 
+  if (gLayout === 'cards') {
+    renderBooksCards(books)
+    return
+  }
+
   if (!books.length) {
     elBooksList.innerHTML = `<tr>
    <td colspan="4">No matching books were found...</td>
@@ -23,25 +30,57 @@ function renderBooks() {
     return
   }
 
-  const srtHtml = books
-    .map(
-      (book, idx) => `
-        <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
-   <td>${book.title}</td>
-   <td>${book.price}</td>
-   <td>${book.rating}</td>
-   <td>
-   <button class="read" onclick ="onShowDetails( '${book.id}')">Read</button>
-   <button class="update"  onclick="onUpdateBook('${book.id}', 'price')">Update price</button>
-   <button class="delete" onclick="onRemoveBook('${book.id}')">Delete</button>
-   </td>
-   </tr>
+  const strHTMLs = books.map((book, idx) => {
+    return `       <tr class = "${idx % 2 === 0 ? 'second-row' : ''}"> 
+                    <td>${book.title}</td>
+                    <td>$${book.price.toFixed(2)}</td>
+                    <td>${book.rating}</td>
+                    <td class="actions">
+                        <button onclick="onShowDetails('${book.id}')" >Read</button>
+                         <button onclick="onUpdateBook('${book.id}', 'price')" >Update price</button>
+                        <button onclick="onRemoveBook('${book.id}')" >Delete</button>
+                    </td>
+                </tr>`
+  })
 
-    `
-    )
-    .join('')
+  // Hide cards container
+  document.querySelector('.cards-container ').style.display = 'none'
+  // Show and render table container
+  elBooksList.innerHTML = strHTMLs.join('')
+  document.querySelector('table').style.display = 'table'
 
-  elBooksList.innerHTML = srtHtml
+  setQueryParams()
+}
+
+function renderBooksCards(books) {
+  const elCardsContainer = document.querySelector('.cards-container')
+  if (!books.length) {
+    elCardsContainer.innerHTML = `<div class="book-card">No matching books were found...</div>`
+    return
+  }
+
+  const strHTMLs = books.map((book) => {
+    return `
+            <div class="book-card">
+                <img src="${book.imgUrl}" />
+                <p><strong>Title:</strong> ${book.title}</p>
+                <p><strong>Rating:</strong> ${book.rating}</p>
+                <p><strong>Price:$${book.price}</strong></p>
+                <p><strong>Desc:</strong> ${book.description}</p>
+                <div class="actions">
+                    <button onclick="onShowDetails('${book.id}')" >Read</button>
+                    <button onclick="onUpdateBook('${book.id}', 'price')" >Update price</button>
+                    <button onclick="onRemoveBook('${book.id}')" >Delete</button>
+                </div>
+            </div>`
+  })
+
+  // Hide table container
+  document.querySelector('table').style.display = 'none'
+  // Show and render cards container
+  elCardsContainer.innerHTML = strHTMLs.join('')
+  elCardsContainer.style.display = 'flex'
+
   setQueryParams()
 }
 
@@ -105,6 +144,11 @@ function onShowDetails(bookId) {
   elBookModal.showModal()
 }
 
+function onSetLayout(layout) {
+  gLayout = layout
+  saveToStorage(LAYOUT_KEY, gLayout)
+  renderBooks()
+}
 
 function onSetFilterBy(filterBy) {
   console.log('filterBy: ', filterBy)
@@ -127,7 +171,7 @@ function onResetFilter() {
 }
 
 function onSetSortBy(elSortField) {
-  console.log('elSortField',elSortField.value);
+  console.log('elSortField', elSortField.value)
 
   gQueryOptions.sortBy.sortField = elSortField.value
   renderBooks()
@@ -148,6 +192,16 @@ function showMsg(action) {
   setTimeout(() => {
     elMsg.classList.add('hide')
   }, 5000)
+}
+
+function onNextPage() {
+  nextPage(gQueryOptions)
+
+  renderBooks()
+}
+
+function onPrevPage() {
+  console.log('back...');
 }
 
 function readQueryParams() {

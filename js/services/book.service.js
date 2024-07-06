@@ -7,52 +7,29 @@ _createBooks()
 // !always save to storage after CRUD
 
 function getBooks(gQueryOptions) {
-  const filterBy = gQueryOptions.filterBy
-  const sortBy = gQueryOptions.sortBy
-
   var books = gBooks
 
   //first to filter and then sorting
-  // (can be in _filter(books, filterBy) &_sortBy(books, sortBy)`s)
-  
-  if (filterBy.txt) {
-    books = books.filter((book) => {
-      const title = book.title.toLowerCase()
-      const filterTxt = filterBy.txt.toLowerCase()
+  books = _filter(books, gQueryOptions.filterBy)
+  books = _sort(books, gQueryOptions.sortBy)
 
-      return title.includes(filterTxt)
-    })
-  }
-
-  if (filterBy.minRating) {
-    books = books.filter((book) => book.rating >= filterBy.minRating)
-  }
-
-  if(sortBy.sortField === 'title'){
-    books =books.toSorted((book1,book2) =>{
-     return  book1.title.localeCompare(book2.title) * sortBy.sortDir
-      } )
-  }
-  
-  if(sortBy.sortField === 'price'){
-   books = books =books.toSorted((book1,book2) => {
-    return ( book1.price -book2.price) * sortBy.sortDir
-
-    })
-  }
-
-  if(sortBy.sortField === 'rating'){
-   books = books =books.toSorted((book1,book2) => {
-    return ( book1.rating -book2.rating) * sortBy.sortDir
-
-    })
-  }
-
+  const page = gQueryOptions.page
+  const startIdx = page.idx * page.size
+  const endIdx = startIdx + page.size
+  books = books.slice(startIdx, endIdx + page.size)
 
   return books
 }
 
-
+function nextPage(gQueryOptions) {
+  var pageIdx = gQueryOptions.page.idx
+  var pageSize = gQueryOptions.page.size
+  if(pageIdx * pageSize >= gBooks.length){
+    gQueryOptions.page.idx = 0
+  }else{
+    gQueryOptions.page.idx++
+  }
+}
 
 function removeBook(bookId) {
   const idx = gBooks.findIndex((book) => book.id === bookId)
@@ -65,11 +42,11 @@ function updateBook(bookId, key, value) {
 
   if (!book) return false
 
-  if (!isValidPrice(newPrice)) {
+  if (!isValidPrice(value)) {
     showMsg('Please enter a valid positive number for the price!')
   }
 
-  book.price = newPrice
+  book.price = value
 
   _saveBooks()
 }
@@ -103,6 +80,42 @@ Description:${book.description}`
   elCoverImg.src = book.imgUrl
 
   return formattedDetails
+}
+
+function _filter(books, filterBy) {
+  if (filterBy.txt) {
+    books = books.filter((book) => {
+      const title = book.title.toLowerCase()
+      const filterTxt = filterBy.txt.toLowerCase()
+
+      return title.includes(filterTxt)
+    })
+  }
+  if (filterBy.minRating) {
+    books = books.filter((book) => book.rating >= filterBy.minRating)
+  }
+  return books
+}
+
+function _sort(books, sortBy) {
+  if (sortBy.sortField === 'title') {
+    books = books.toSorted((book1, book2) => {
+      return book1.title.localeCompare(book2.title) * sortBy.sortDir
+    })
+  }
+
+  if (sortBy.sortField === 'price') {
+    books = books = books.toSorted((book1, book2) => {
+      return (book1.price - book2.price) * sortBy.sortDir
+    })
+  }
+
+  if (sortBy.sortField === 'rating') {
+    books = books = books.toSorted((book1, book2) => {
+      return (book1.rating - book2.rating) * sortBy.sortDir
+    })
+  }
+  return books
 }
 
 function _saveBook() {

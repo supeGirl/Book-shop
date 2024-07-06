@@ -35,31 +35,45 @@
               <label>
                   <span>Descending</span>
                   <input class="sort-desc" type="checkbox" oninput="onSetSortDir(this)" />              </label>
+                
+                <div class="functionality-btns">
+                  <button class="add-book" onclick="onAddBook()">Add another book</button>
+                  <button class="btn-option btn-table" onclick="onSetLayout('table')">
+                    <i class="fa-solid fa-grip-lines"></i>☰
+                  </button>
+                  <button class="btn-option btn-cards" onclick="onSetLayout('cards')">
+                    <i class="fa-solid fa-grip"></i>
+              
+                  </button>
+                </div>
           </div>
       </fieldset>
   </section>
 
-    <section class="main-container">
-
-  <div class="functionality-btns">
-    <button class="add-book" onclick="onAddBook()">Add another book</button>
-  </div>
-</section>
 
       <table class="books-list">
         <thead class="head-table">
           <tr>
-            <td>Title <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span></td>
-            <td>Price  <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span></td>
-            <td>Rating <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
-              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span></td>
+            <td>Title 
+              <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+            </td>
+            <td>Price 
+               <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+            </td>
+            <td>Rating
+               <span class="sort name-asc" onclick="onSetSortBy('NAME_ASC')">▲</span>
+              <span class="sort name-des" onclick="onSetSortBy('NAME_DES')">▼</span>
+            </td>
               <td>Actions</td>
             </tr>
         </thead>
         <tbody class="body-table"></tbody>
       </table>
+
+      <div class="cards-container">
+      </div>
     </section>
 
     <dialog class="book-details">
@@ -77,7 +91,8 @@
       </form>
     </dialog>
   
-
+<button class="nextPage" onclick="onPrevPage()">Prev Page</button>
+<button class="nextPage" onclick="onNextPage()">Next Page</button>
     <div class="user-msg hide"></div>
 
     <script src="js/services/storage.servise.js"></script>
