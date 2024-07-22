@@ -11,8 +11,18 @@ html,
 body {
   margin: 0;
   padding: 0;
+<<<<<<< HEAD
   min-height: 100vh;
   background-image: var(--body-color);
+=======
+  height: 100vw;
+  background-image: var(--body-color);
+  /* CR on this  */
+  /* background-repeat:no-repeat;
+  background-size: cover; 
+  background-size: 100% 100%;  */
+  
+>>>>>>> e6f514c5cf83cc39435d801f118740857246fc08
 }
 
 body {
@@ -26,6 +36,10 @@ body {
   width: 100vw;
   gap: 10px;
   overflow-x: hidden;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e6f514c5cf83cc39435d801f118740857246fc08
 }
 
 .title {
@@ -33,7 +47,11 @@ body {
 }
 
 header {
+<<<<<<< HEAD
   padding: 10px;
+=======
+  padding: 10px; 
+>>>>>>> e6f514c5cf83cc39435d801f118740857246fc08
 }
 
 .logo-container {
@@ -42,6 +60,7 @@ header {
 }
 
 .logo-img {
+<<<<<<< HEAD
   max-width: 150px;
   height: 100%;
 }
@@ -62,6 +81,15 @@ p{
   margin: 0;
   text-wrap: pretty;
 
+=======
+  max-width: 150px; 
+  height: 100%; 
+}
+
+h1 {
+  font-size: 24px; 
+  font-weight: normal; 
+>>>>>>> e6f514c5cf83cc39435d801f118740857246fc08
 }
 
 .functionality-btns {
@@ -270,7 +298,11 @@ button.delete {
 .page-btns {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+<<<<<<< HEAD
   gap: 10px;
+=======
+  /* gap: 10px; */
+>>>>>>> e6f514c5cf83cc39435d801f118740857246fc08
 }
 .page-btns .prevPage {
   justify-self: end;
